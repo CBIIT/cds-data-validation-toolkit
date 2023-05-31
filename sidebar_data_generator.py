@@ -2,7 +2,66 @@ import requests
 import yaml
 import pandas as pd
 
-query = '''{\r\n    searchSubjects{\r\n        subjectCountByStudy {\r\n  group\r\n  subjects\r\n}\r\nsubjectCountByExperimentalStrategy {\r\n  group\r\n  subjects\r\n}\r\nsubjectCountByAccess {\r\n  group\r\n  subjects\r\n}\r\nsubjectCountByGender {\r\n  group\r\n  subjects\r\n}\r\nsubjectCountByIsTumor {\r\n  group\r\n  subjects\r\n}\r\nsubjectCountByAnalyteType {\r\n  group\r\n  subjects\r\n}\r\nsubjectCountByFileType {\r\n  group\r\n  subjects\r\n}\r\nsubjectCountByDiseaseSite {\r\n  group\r\n  subjects\r\n}\r\nsubjectCountByLibraryStrategy {\r\n  group\r\n  subjects\r\n}\r\nsubjectCountByLibrarySource {\r\n  group\r\n  subjects\r\n}\r\nsubjectCountByLibrarySelection {\r\n  group\r\n  subjects\r\n}\r\nsubjectCountByLibraryLayout {\r\n  group\r\n  subjects\r\n}\r\nsubjectCountByPlatform {\r\n  group\r\n  subjects\r\n}\r\nsubjectCountByInstrumentModel {\r\n  group\r\n  subjects\r\n}\r\nsubjectCountByReferenceGenomeAssembly {\r\n  group\r\n  subjects\r\n}\r\nsubjectCountByPrimaryDiagnosis {\r\n  group\r\n  subjects\r\n}\r\nsubjectCountByPhsAccession {\r\n  group\r\n  subjects\r\n}\r\nsubjectCountByStudyDataType {\r\n  group\r\n  subjects\r\n}\r\nsubjectCountByAcl {\r\n  group\r\n  subjects\r\n}\r\n    }\r\n}'''
+query = '''{
+    searchSubjects{
+        subjectCountByStudy {
+            group
+            subjects}
+        subjectCountByExperimentalStrategy {
+            group
+            subjects}
+        subjectCountByAccess {
+            group
+            subjects}
+        subjectCountByGender {
+            group
+            subjects}
+        subjectCountByIsTumor {
+            group
+            subjects}
+        subjectCountByAnalyteType {
+            group
+            subjects}
+        subjectCountByFileType {
+            group
+            subjects}
+        subjectCountByDiseaseSite {
+            group
+            subjects}
+        subjectCountByLibraryStrategy {
+            group
+            subjects}
+        subjectCountByLibrarySource {
+            group
+            subjects}
+        subjectCountByLibrarySelection {
+            group
+            subjects}
+        subjectCountByLibraryLayout {
+            group
+            subjects}
+        subjectCountByPlatform {
+            group
+            subjects}
+        subjectCountByInstrumentModel {
+            group
+            subjects}
+        subjectCountByReferenceGenomeAssembly {
+            group
+            subjects}
+        subjectCountByPrimaryDiagnosis {
+            group
+            subjects}
+        subjectCountByPhsAccession {
+            group
+            subjects}
+        subjectCountByStudyDataType {
+            group
+            subjects}
+        subjectCountByAcl {
+            group
+            subjects}
+}}'''
 url = ''
 headers = {'Content-Type': 'application/json'}
 body = {'query': query}
