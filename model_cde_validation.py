@@ -71,6 +71,7 @@ def model_cde_validation(cde_url_base, props_file, validation_result_file_key, c
             validation_result["enum_property_without_cde"][prop] = enum_list
         if enum_list is None and link_count == 0 and len(pv_value_list) > 0:
             validation_result["cde_property_without_enum"][prop] = pv_value_list
+            cde_pv_dict[prop] = pv_value_list
         if enum_list is not None and link_count == 0 and len(pv_value_list) > 0: #has meaningful cde pv list and has enum list
             pv_in_cde_only = []
             pv_in_enum_only = []
