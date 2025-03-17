@@ -13,6 +13,7 @@ VALUE_DOMAIN = "ValueDomain"
 PERMISSIBLE_VALUES = "PermissibleValues"
 VALUE_MEANING = "ValueMeaning"
 CONCEPTS = "Concepts"
+VERSION = "version"
 
 if LOG_PREFIX not in os.environ:
     os.environ[LOG_PREFIX] = 'CDE_NCIT'
@@ -26,6 +27,7 @@ def model_cde_validation(cde_url_base, props_file, validation_result_file_key, c
     validation_result["pv_in_cde_not_enum"] = {}
     validation_result["pv_in_enum_not_cde"] = {}
     validation_result["cde_property_with_link"] = {}
+    validation_result["cde_version_unmatch"] = {}
     cde_pv_dict = {}
     link_property_df_dict = {}
 
@@ -37,6 +39,7 @@ def model_cde_validation(cde_url_base, props_file, validation_result_file_key, c
         if terms is None:
             continue
         cde_code = terms[0].get("Code")
+        model_cde_version = terms[0].get("Version")
         if cde_code is None:
             continue
         cde_url = cde_url_base + cde_code
@@ -46,7 +49,16 @@ def model_cde_validation(cde_url_base, props_file, validation_result_file_key, c
             log.error(f"CDE Request failed with status code {response.status_code}")
             continue
         data = json.loads(response.content)
+        if data['status'] == "error":
+            log.info(prop)
+            continue
         pv_list = data.get(DATA_ELEMENT,{}).get(VALUE_DOMAIN,{}).get(PERMISSIBLE_VALUES)
+        cadsr_cde_version = data.get(DATA_ELEMENT,{}).get(VERSION)
+        if cadsr_cde_version is not None and model_cde_version is not None:
+            if float(model_cde_version) != float(cadsr_cde_version):
+                validation_result["cde_version_unmatch"][prop] = {}
+                validation_result["cde_version_unmatch"][prop]["model_cde_version"] = model_cde_version
+                validation_result["cde_version_unmatch"][prop]["cadsr_cde_version"] = cadsr_cde_version
         if pv_list is None:
             log.error("Can not find the Permissible Values")
             continue
