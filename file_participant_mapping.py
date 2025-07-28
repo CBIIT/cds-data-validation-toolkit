@@ -36,7 +36,7 @@ def file_participant_mapping(file_tsv_path, participant_tsv_path, csv_data_path,
         csv_data_row['urls'] = row['file_url_in_cds']
         consent_number = str(csv_data_row['consent_group_number'])
         #consent_number = str(csv_data_row['consent_code'])
-        csv_data_row['acl'] = acl_value = f"['phs001524.c{consent_number}']"
+        csv_data_row['acl'] = f"['phs001524.c{consent_number}']"
         csv_data_row['authz'] = f"['/project/phs001524.c{consent_number}']"
         # add row to output dataFrame
         output_rows.append(csv_data_row)   
