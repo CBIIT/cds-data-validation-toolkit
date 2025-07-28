@@ -1,0 +1,4 @@
+cde_url: "cde_url"
+props_file: "model-props.yml" #model property file
+validation_result_file_key: "tests/model_cde_validation_result.yaml" #output validation result file key
+cde_pv_file_key: "tests/cde_pv.yaml" #output cde pv file key

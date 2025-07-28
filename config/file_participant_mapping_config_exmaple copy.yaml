@@ -1,0 +1,4 @@
+file_tsv_path: "file.tsv" #file metadata tsv path
+participant_tsv_path: "participant.tsv" #participant metadata tsv path
+csv_data_path: "consent_code.csv"
+output_path: "output.tsv"

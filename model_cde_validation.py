@@ -5,6 +5,7 @@ from bento.common.utils import get_logger, LOG_PREFIX, APP_NAME
 import os
 import regex as rx
 import pandas as pd
+import argparse
 
 CDE_CODE = "CDECode"
 CDE_FULLNAME = "CDEFullName"
@@ -49,7 +50,7 @@ def model_cde_validation(cde_url_base, props_file, validation_result_file_key, c
             log.error(f"CDE Request failed with status code {response.status_code}")
             continue
         data = json.loads(response.content)
-        if data['status'] == "error":
+        if data.get(DATA_ELEMENT,{}) is None:
             log.info(prop)
             continue
         pv_list = data.get(DATA_ELEMENT,{}).get(VALUE_DOMAIN,{}).get(PERMISSIBLE_VALUES)
@@ -60,7 +61,7 @@ def model_cde_validation(cde_url_base, props_file, validation_result_file_key, c
                 validation_result["cde_version_unmatch"][prop]["model_cde_version"] = model_cde_version
                 validation_result["cde_version_unmatch"][prop]["cadsr_cde_version"] = cadsr_cde_version
         if pv_list is None:
-            log.error("Can not find the Permissible Values")
+            log.warning(f"Can not find the Permissible Values for the property: {prop} with cde code {cde_code}")
             continue
         pv_value_list = []
         enum_list = props["PropDefinitions"][prop].get("Enum")
@@ -108,8 +109,13 @@ def model_cde_validation(cde_url_base, props_file, validation_result_file_key, c
         yaml.dump(cde_pv_dict , yaml_file, default_flow_style=False, width=100000000, sort_keys=False)
 
 if __name__ == "__main__":
-    cde_url = "CDE_URL"
-    props_file = "model-props.yml" #model property file
-    validation_result_file_key = "tests/model_cde_validation_result.yaml" #output validation result file key
-    cde_pv_file_key = "tests/cde_pv.yaml" #output cde pv file key
+    parser = argparse.ArgumentParser(description="Validate model pv againist the cadsr pv.")
+    parser.add_argument('config_file', help='Confguration file', nargs='?', default=None)
+    args = parser.parse_args()
+    with open(args.config_file, "r") as f:
+        config = yaml.safe_load(f)
+    cde_url = config['cde_url']
+    props_file = config['props_file']
+    validation_result_file_key = config["validation_result_file_key"]
+    cde_pv_file_key = config["cde_pv_file_key"]
     model_cde_validation(cde_url, props_file, validation_result_file_key, cde_pv_file_key)
