@@ -27,7 +27,7 @@ def file_participant_mapping(file_tsv_path, participant_tsv_path, csv_data_path,
         try:
             participant_row = participant_data.loc[participant_data['study_participant_id'] == row['participant.study_participant_id']].iloc[0]
         except IndexError:
-            print(f"File with study_participant_id {row['participant.study_participant_id']} not found in participant data.")
+            print(f"File with study_participant_id {row['participant.study_participant_id']} at line {index} not found in participant data.")
             continue
         csv_data_row = csv_data.loc[csv_data['participant_id'] == participant_row['participant_id']].iloc[0]
         csv_data_row['guid'] = row['file_id']
@@ -39,7 +39,7 @@ def file_participant_mapping(file_tsv_path, participant_tsv_path, csv_data_path,
         csv_data_row['acl'] = f"['phs001524.c{consent_number}']"
         csv_data_row['authz'] = f"['/project/phs001524.c{consent_number}']"
         # add row to output dataFrame
-        output_rows.append(csv_data_row)   
+        output_rows.append(csv_data_row)
 
     # Save the output DataFrame to a CSV file
     #output_data = pd.DataFrame(output_rows, columns=output_rows[0].keys())
@@ -50,6 +50,7 @@ def file_participant_mapping(file_tsv_path, participant_tsv_path, csv_data_path,
 
 
     output_data.to_csv(output_path, sep='\t', index=False)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Map file data to participant data and generate output TSV.")
