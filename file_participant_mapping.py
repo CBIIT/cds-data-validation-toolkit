@@ -4,7 +4,7 @@ import yaml
 
 
 
-def file_participant_mapping(file_tsv_path, participant_tsv_path, csv_data_path, output_path):
+def file_participant_mapping(file_tsv_path, participant_tsv_path, csv_data_path, output_path, phs_accession):
     """
     Maps file data to participant data and generates an output TSV file with combined information.
     
@@ -18,6 +18,7 @@ def file_participant_mapping(file_tsv_path, participant_tsv_path, csv_data_path,
     file_data = pd.read_csv(file_tsv_path, sep='\t')
     participant_data = pd.read_csv(participant_tsv_path, sep='\t')
     csv_data = pd.read_csv(csv_data_path)
+    #csv_data = pd.read_csv(csv_data_path,  sep='\t')
     #csv_data = pd.read_excel(csv_data_path)
     csv_data['participant_id'] = csv_data['participant_id'].astype(str)
     participant_data['participant_id'] = participant_data['participant_id'].astype(str)
@@ -36,8 +37,8 @@ def file_participant_mapping(file_tsv_path, participant_tsv_path, csv_data_path,
         csv_data_row['urls'] = row['file_url_in_cds']
         consent_number = str(csv_data_row['consent_group_number'])
         #consent_number = str(csv_data_row['consent_code'])
-        csv_data_row['acl'] = f"['phs001524.c{consent_number}']"
-        csv_data_row['authz'] = f"['/project/phs001524.c{consent_number}']"
+        csv_data_row['acl'] = f"['{phs_accession}.c{consent_number}']"
+        csv_data_row['authz'] = f"['/project/{phs_accession}.c{consent_number}']"
         # add row to output dataFrame
         output_rows.append(csv_data_row)
 
@@ -58,4 +59,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
     with open(args.config_file, "r") as f:
         config = yaml.safe_load(f)
-    file_participant_mapping(config['file_tsv_path'], config['participant_tsv_path'], config['csv_data_path'], config['output_path'])
+    file_participant_mapping(config['file_tsv_path'], config['participant_tsv_path'], config['csv_data_path'], config['output_path'], config['phs_accession'])
