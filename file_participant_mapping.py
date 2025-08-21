@@ -35,10 +35,12 @@ def file_participant_mapping(file_tsv_path, participant_tsv_path, csv_data_path,
         csv_data_row['md5'] = row['md5sum']
         csv_data_row['size'] = row['file_size']
         csv_data_row['urls'] = row['file_url_in_cds']
-        consent_number = str(csv_data_row['consent_group_number'])
-        #consent_number = str(csv_data_row['consent_code'])
+        try:
+            consent_number = str(csv_data_row['consent_group_number'])
+        except KeyError:
+            consent_number = str(csv_data_row['consent_code'])
         csv_data_row['acl'] = f"['{phs_accession}.c{consent_number}']"
-        csv_data_row['authz'] = f"['/project/{phs_accession}.c{consent_number}']"
+        csv_data_row['authz'] = f"['/programs/{phs_accession}.c{consent_number}']"
         # add row to output dataFrame
         output_rows.append(csv_data_row)
 
