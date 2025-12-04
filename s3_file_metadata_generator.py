@@ -35,8 +35,9 @@ def get_all_files_and_metadata(bucket_name, directory_prefix="", aws_access_key_
                         'file_url_in_cds': f"s3://{bucket_name}{file_sep}{object_key}",
                         'md5sum': s3_hash,
                         'Key': object_key,
-                        'file_name': os.path.basename(object_key),
+                        'file_name': object_key.replace(directory_prefix+"/",""),
                         'file_size': metadata_response.get('ContentLength'),
+                        'file_type': os.path.splitext(object_key)[1].lstrip('.').upper(),
                         'LastModified': metadata_response.get('LastModified'),
                         'ETag': metadata_response.get('ETag').strip('"'), # Remove quotes from ETag
                         'ContentType': metadata_response.get('ContentType'),
@@ -74,13 +75,13 @@ def export_to_tsv(data_list, filename="s3_metadata.tsv"):
 
 
 # --- Example Usage ---
-bucket_name = 'bucket name here'
-directory_prefix = 'folder path here/' # e.g., 'images/' or '' for the whole bucket
-aws_access_key_id = None  # Replace with your AWS access key ID if needed
-aws_secret_access_key = None  # Replace with your AWS secret access key if needed
-aws_session_token = None  # Replace with your AWS session token if needed, default is None
+bucket_name = "your-bucket-name"  # Replace with your S3 bucket name
+directory_prefix = "" # e.g., 'images/' or '' for the whole bucket
+aws_access_key_id = ""  # Replace with your AWS access key ID if needed
+aws_secret_access_key = ""  # Replace with your AWS secret access key if needed
+aws_session_token = None # Replace with your AWS session token if needed, default is None
 
 all_metadata = get_all_files_and_metadata(bucket_name, directory_prefix, aws_access_key_id, aws_secret_access_key, aws_session_token)
 
 if all_metadata:
-    export_to_tsv(all_metadata, filename="s3_object_metadata.tsv")
+    export_to_tsv(all_metadata, filename="s3_object_metadata_protocol.tsv")
