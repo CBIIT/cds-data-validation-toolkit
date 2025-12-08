@@ -13,7 +13,7 @@ DB2_PASS = "password"
 
 OUTPUT_FILE = "node_differences.json"
 model = {}
-schema_file = ["tests/cds-model-8.0.2/model-desc/cds-model.yml", "tests/cds-model-8.0.2/model-desc/cds-model-props.yml"]
+schema_file = ["model-desc/model.yml", "model-desc/model-props.yml"]
 for schema in schema_file:
     with open(schema) as f:
         temp_model = yaml.load(f, Loader=yaml.FullLoader)
